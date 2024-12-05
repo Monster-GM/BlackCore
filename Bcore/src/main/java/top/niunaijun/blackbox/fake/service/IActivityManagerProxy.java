@@ -403,6 +403,10 @@ public class IActivityManagerProxy extends ClassInvocationStub {
 
     @ProxyMethod("broadcastIntentWithFeature")
     public static class BroadcastIntentWithFeature extends BroadcastIntent {
+        @Override
+        protected Object hook(Object who, Method method, Object[] args) throws Throwable {
+            return super.hook(who, method, args);
+        }
     }
 
     @ProxyMethod("broadcastIntent")
@@ -649,4 +653,6 @@ public class IActivityManagerProxy extends ClassInvocationStub {
             return 0;
         }
     }
+
+
 }

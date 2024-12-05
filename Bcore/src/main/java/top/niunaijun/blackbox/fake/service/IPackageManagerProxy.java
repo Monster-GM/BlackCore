@@ -125,11 +125,9 @@ public class IPackageManagerProxy extends BinderInvocationStub {
         protected Object hook(Object who, Method method, Object[] args) throws Throwable {
             String packageName = (String) args[0];
             int flag = (int) args[1];
-//            if (ClientSystemEnv.isFakePackage(packageName)) {
-//                packageName = BlackBoxCore.getHostPkg();
-//            }
             PackageInfo packageInfo = BlackBoxCore.getBPackageManager().getPackageInfo(packageName, flag, BActivityThread.getUserId());
             if (packageInfo != null) {
+                packageInfo.applicationInfo.uid = BActivityThread.getBUid();
                 return packageInfo;
             }
             if (AppSystemEnv.isOpenPackage(packageName)) {

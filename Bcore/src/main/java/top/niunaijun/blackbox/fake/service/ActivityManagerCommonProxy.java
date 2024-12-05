@@ -36,6 +36,7 @@ public class ActivityManagerCommonProxy {
 
     @ProxyMethod("startActivity")
     public static class StartActivity extends MethodHook {
+
         @Override
         protected Object hook(Object who, Method method, Object[] args) throws Throwable {
             MethodParameterUtils.replaceFirstAppPkg(args);
@@ -200,6 +201,45 @@ public class ActivityManagerCommonProxy {
         @Override
         protected Object hook(Object who, Method method, Object[] args) throws Throwable {
             return BlackBoxCore.getBActivityManager().getCallingActivity((IBinder) args[0], BActivityThread.getUserId());
+        }
+    }
+
+    @ProxyMethod("overridePendingTransition")
+    public static class overridePendingTransition extends MethodHook {
+        @Override
+        protected Object hook(Object who, Method method, Object[] args) throws Throwable {
+            return method.invoke(who, args);
+        }
+    }
+
+    @ProxyMethod("GetCurrentUserId")
+    public static class GetCurrentUserId extends MethodHook {
+        @Override
+        protected Object hook(Object who, Method method, Object[] args) throws Throwable {
+            return 0;
+        }
+    }
+    @ProxyMethod("getPersistedUriPermissions")
+    public static class getPersistedUriPermissions extends MethodHook {
+        @Override
+        protected Object hook(Object who, Method method, Object[] args) throws Throwable {
+            MethodParameterUtils.replaceFirstAppPkg(args);
+            return method.invoke(who, args);
+        }
+    }
+    @ProxyMethod("startActivityWithConfig")
+    public static class startActivityWithConfig extends StartActivity {
+        @Override
+        protected Object hook(Object who, Method method, Object[] args) throws Throwable {
+            MethodParameterUtils.replaceFirstAppPkg(args);
+            return method.invoke(who, args);
+        }
+    }
+    @ProxyMethod("startNextMatchingActivity")
+    public static class startNextMatchingActivity extends StartActivity {
+        @Override
+        protected Object hook(Object who, Method method, Object[] args) throws Throwable {
+            return false;
         }
     }
 }
